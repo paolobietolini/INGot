@@ -1,0 +1,32 @@
+# Python build artifacts
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv/
+.environments/
+
+# Test/tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+
+# Sensitive / local data — never commit
+.env
+raw/
+log/
+output/
+spark-warehouse/
+config/private_classifications.toml
+config/private_categories.toml
+AUDIT_TODO.md
+
+
+# OS junk
+.DS_Store
+Thumbs.db

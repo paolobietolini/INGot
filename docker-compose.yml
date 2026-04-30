@@ -1,0 +1,11 @@
+services:
+  ingot-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ingot
+    env_file:
+      - .env
+    volumes:
+      - ./raw:/code/raw
+      - ./output:/code/output

@@ -1,0 +1,25 @@
+[01;34moutput/[0m
+├── [01;34mdim_category[0m
+│   ├── [00mpart-00000-fadb7017-6007-4984-b662-d3a6f4b1db7e-c000.snappy.parquet[0m
+│   └── [00m_SUCCESS[0m
+├── [01;34mdim_counterparty[0m
+│   ├── [00mpart-00000-3702eccb-461d-49d7-86f1-9c7bb42e43bf-c000.snappy.parquet[0m
+│   └── [00m_SUCCESS[0m
+├── [01;34mdim_date[0m
+│   ├── [00mpart-00000-839c6262-107b-4902-b097-f3636255f083-c000.snappy.parquet[0m
+│   └── [00m_SUCCESS[0m
+├── [01;34mdim_payment_method[0m
+│   ├── [00mpart-00000-87fe0448-ecff-4be2-a600-d44d07ca0ecf-c000.snappy.parquet[0m
+│   └── [00m_SUCCESS[0m
+├── [01;34mfact_expenses[0m
+│   ├── [00m_SUCCESS[0m
+│   ├── [01;34myear=2025[0m
+│   │   └── [00mpart-00000-b79511d2-ff9b-4d57-9c06-9a3a78843c92.c000.snappy.parquet[0m
+│   └── [01;34myear=2026[0m
+│       └── [00mpart-00000-b79511d2-ff9b-4d57-9c06-9a3a78843c92.c000.snappy.parquet[0m
+└── [01;34mfact_income[0m
+    ├── [00m_SUCCESS[0m
+    ├── [01;34myear=2025[0m
+    │   └── [00mpart-00000-b8c32514-57db-427f-a9ef-874af987d3ea.c000.snappy.parquet[0m
+    └── [01;34myear=2026[0m
+        └── [00mpart-00000-b8c32514-57db-427f-a9ef-874af987d3ea.c000.snappy.parquet[0m

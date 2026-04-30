@@ -1,0 +1,11 @@
+transaction_sk,date_sk,counterparty_sk,category_sk,payment_method_sk,amount,currency,year
+38f8043fb06582e9,20251222,0e19bd17261c88f3,shopping_media,card,12.34,PLN,2025
+090805ce96bdca3a,20251226,b22a7a689cc70120,home_utilities,blik,12.34,PLN,2025
+958d31a9b05689f9,20251231,ad64003ae114339d,unclassified,blik,12.34,PLN,2025
+1281ecaf15697a90,20251231,ad64003ae114339d,unclassified,blik,12.34,PLN,2025
+dd6ef33c54295879,20251220,265d7fc3bb16c476,food_groceries,card,12.34,PLN,2025
+8b17645368445dc4,20251217,265d7fc3bb16c476,food_groceries,card,12.34,PLN,2025
+12e8777e8b412b8a,20251231,302e50b63a39ac78,unclassified,transfer,12.34,PLN,2025
+c35f5661d9236ab6,20251216,ec8cd90e53db34c9,leisure_sport,card,12.34,PLN,2025
+36e17ff0b7e6029a,20251221,25044f9f260b389e,shopping_media,blik,12.34,PLN,2025
+ffc6bfa601ffac55,20251217,d0b3cba71f725563,transport_taxi_rideshare,card,12.34,PLN,2025

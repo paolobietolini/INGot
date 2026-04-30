@@ -1,0 +1,23 @@
+[project]
+name = "ingot"
+version = "0.1.0"
+description = "ING Bank transaction ETL pipeline (bronze → silver → gold)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "chardet>=7.4.3",
+    "pandas>=3.0.2",
+    "polars>=1.40.1",
+    "pyarrow>=24.0.0",
+    "pyspark>=4.1.1",
+    "python-dotenv>=1.0.0",
+    "rapidfuzz>=3.14.5",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

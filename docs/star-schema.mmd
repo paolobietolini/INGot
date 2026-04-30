@@ -1,0 +1,61 @@
+%% Star schema — gold layer
+%% Render: see docs/README.md → "Render diagrams"
+erDiagram
+    FACT_EXPENSES }o--|| DIM_DATE           : "date_sk"
+    FACT_EXPENSES }o--|| DIM_COUNTERPARTY   : "counterparty_sk"
+    FACT_EXPENSES }o--|| DIM_CATEGORY       : "category_sk"
+    FACT_EXPENSES }o--|| DIM_PAYMENT_METHOD : "payment_method_sk"
+
+    FACT_INCOME   }o--|| DIM_DATE           : "date_sk"
+    FACT_INCOME   }o--|| DIM_COUNTERPARTY   : "counterparty_sk"
+
+    FACT_EXPENSES {
+        string transaction_sk PK
+        int    date_sk        FK
+        int    year           "partition column"
+        string counterparty_sk FK
+        string category_sk    FK
+        string payment_method_sk FK
+        decimal amount
+        string  currency
+    }
+
+    FACT_INCOME {
+        string transaction_sk PK
+        int    date_sk        FK
+        int    year           "partition column"
+        string counterparty_sk FK
+        decimal amount
+        string  currency
+        string  source        "salary | consulting | sale"
+    }
+
+    DIM_DATE {
+        int     date_sk      PK "YYYYMMDD"
+        date    date
+        int     year
+        int     quarter
+        int     month
+        string  month_name
+        int     week_of_year "ISO 8601"
+        int     day_of_week  "Mon=1..Sun=7"
+        string  day_name
+        boolean is_weekend
+    }
+
+    DIM_COUNTERPARTY {
+        string counterparty_sk      PK "sha256(canonical)[:16]"
+        string counterparty_details "canonical merchant name"
+    }
+
+    DIM_CATEGORY {
+        string category_sk  PK "human-readable, collision-checked"
+        string category
+        string subcategory
+    }
+
+    DIM_PAYMENT_METHOD {
+        string payment_method_sk PK "= name"
+        string payment_method
+        string payment_category  "consumer | wire | pending | other"
+    }

@@ -1,0 +1,8 @@
+payment_method_sk,payment_method,payment_category
+card,card,consumer
+blik,blik,consumer
+transfer,transfer,consumer
+sepa_transfer,sepa_transfer,wire
+currency_exchange,currency_exchange,wire
+pending,pending,pending
+other,other,other

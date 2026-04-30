@@ -1,0 +1,29 @@
+# Copy to config/private_classifications.toml and fill in your own patterns.
+# This file documents the keys; the real file is gitignored.
+#
+# Each value is a SQL pattern (for LIKE) or regex fragment (for RLIKE) used
+# inside config/silver_classifications.sql. Adjust to match your bank exports.
+
+[patterns]
+# LIKE pattern for own-name + city, flags investment outflows.
+own_name_investment_pattern = "%first last%city%"
+
+# RLIKE regex matching your own name in counterparty fields (internal transfers).
+own_name_rlike = "last.*first|first.*last"
+
+# IBAN of an account where you wire investment funds.
+investment_iban = "DE00000000000000000000"
+
+# LIKE pattern matching your employer name (income_salary).
+employer_name = "%your_employer_name%"
+
+# LIKE pattern matching a consulting client (income_consulting).
+consulting_client = "%your_consulting_client%"
+
+# Spouse / partner name. Two LIKE patterns (primary + alt spelling) for transfer_family.
+spouse_like     = "%spouse_first_last%"
+spouse_like_alt = "%alt_spelling%"
+
+# Family member name. RLIKE used in BOTH income_sale (when family member sells you
+# something) and transfer_family. Plain literal works as a regex too.
+family_member_rlike = "family_first_last"

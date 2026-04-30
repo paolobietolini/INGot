@@ -1,0 +1,11 @@
+category_sk,category,subcategory
+food_groceries,Food,Groceries
+food_restaurant,Food,Restaurant
+food_misc,Food,Food Misc
+home_insurance,Home,Home Insurance
+home_loan,Home,Loan
+home_utilities,Home,Utilities
+home_maintenance,Home,Home Maintenance
+transport_fuel,Transport,Fuel
+transport_public_transport,Transport,Public Transport
+transport_vehicle_maintenance,Transport,Vehicle Maintenance
