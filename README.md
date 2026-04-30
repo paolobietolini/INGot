@@ -13,6 +13,8 @@ dimensional modeling and a fuzzy-match categorization pipeline.
   - [Data quality gate](#data-quality-gate)
 - [Layout](#layout)
 - [Run](#run)
+  - [Command-line arguments](#command-line-arguments)
+  - [Tests](#tests)
 - [Stack](#stack)
 - [Roadmap](#roadmap)
 - [Design notes](#design-notes)
@@ -261,7 +263,14 @@ mkdir -p raw && cp /path/to/your_export.csv raw/
 uv run python main.py
 ```
 
-Run tests:
+### Command-line arguments
+- `--input`, `-i`: Input path (raw data directory)
+- `--out`,  `-o`: Output directory for pipeline results
+- `--format`, `-f`: Output format (default: parquet)
+- `--help`, `-h`: Help
+
+
+### Tests:
 
 ```bash
 uv run pytest
@@ -270,6 +279,8 @@ uv run pytest
 Outputs Parquet tables to `output/`. Facts are partitioned by `year`
 (e.g. `output/fact_expenses/year=2025/...`); dimensions are written as
 single coalesced files.
+
+Both format and input/output path(s) can be customised via the [command-line arguments](#command-line-arguments)
 
 ## Stack
 
