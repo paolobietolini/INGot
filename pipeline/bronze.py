@@ -12,7 +12,7 @@ from pyspark.sql import SparkSession, DataFrame
 
 from pipeline.schemas.bronze import MAPPINGS, BRONZE_SCHEMA, OPTIONAL_COLUMNS
 
-DELIMITER = os.getenv(DELIMITER)
+DELIMITER = ';'
 
 logger = logging.getLogger(__name__)
 
