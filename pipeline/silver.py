@@ -1,11 +1,12 @@
 from pipeline.bronze import bronze
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 import re
 import tomllib
 import logging
 from pyspark.sql import SparkSession, DataFrame
-
+import pyspark.sql.functions as F
+import os
 logger = logging.getLogger(__name__)
 _CONFIG_DIR = Path(__file__).resolve().parent.parent / 'config'
 _SQL_PATH = _CONFIG_DIR / 'silver_classifications.sql'
@@ -45,7 +46,7 @@ def _is_real_date(value) -> bool:
         return False
 
 
-def silver(spark: SparkSession, raw_path: Path) -> DataFrame:
+def silver(spark: SparkSession, raw_path: Path, lookback: int | None = None) -> DataFrame:
     """
     Ingest the bronze DataFrame and execute basic cleaning.
 
@@ -85,5 +86,11 @@ def silver(spark: SparkSession, raw_path: Path) -> DataFrame:
             )
 
         logger.info("Cleaned %d non-date rows (footer/garbage). Actual transactions count: %d", diff, actual_count)
+
+    if lookback is not None:
+        max_date = processed_silver.agg(F.max("transaction_date")).collect()[0]["max"]
+        cutoff = max_date - timedelta(days=lookback)
+        processed_silver = processed_silver.filter(F.col("transaction_date") >= F.lit(cutoff))
+        logger.info("Lookback filter: keeping transactions >= %s (max=%s, %d days)", cutoff, max_date, lookback)
 
     return processed_silver

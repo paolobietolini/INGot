@@ -4,7 +4,7 @@ from datetime import datetime
 from functools import reduce
 from pathlib import Path
 from typing import Optional
-
+import os
 import chardet
 import polars as pl
 from polars import DataFrame as PolarsDataFrame
@@ -12,7 +12,7 @@ from pyspark.sql import SparkSession, DataFrame
 
 from pipeline.schemas.bronze import MAPPINGS, BRONZE_SCHEMA, OPTIONAL_COLUMNS
 
-DELIMITER = ';'
+DELIMITER = os.getenv(DELIMITER)
 
 logger = logging.getLogger(__name__)
 
@@ -23,9 +23,8 @@ def _get_sha256_hash(raw_file: bytes) -> str:
     h.update(raw_file)
     return h.hexdigest()
 
-def _parse_metadata(
-    path: Path,
-) -> tuple[Optional[int], Optional[int], Optional[str], str, str, bytes]:
+
+def _parse_metadata(path: Path,) -> tuple[Optional[int], Optional[int], Optional[str], str, str, bytes]:
     """
     Analyze the CSV's text metadata before structured upload.
 
@@ -101,7 +100,8 @@ def _get_normalized_headers(header_line: str) -> list[str]:
         Output:
             ['A', 'column_1', 'A_1', 'A_2']
     """
-    cells = [c.strip().replace('"', '').replace(':', '') for c in header_line.split(DELIMITER)]
+    cells = [c.strip().replace('"', '').replace(':', '')
+             for c in header_line.split(DELIMITER)]
     uniques: list[str] = []
     empty_counter = 1
     name_counters: dict[str, int] = {}
@@ -128,12 +128,15 @@ def _validate_and_align_schema(pdf: PolarsDataFrame, file_name: str) -> PolarsDa
 
     missing_required = (bronze_cols - pdf_cols) - OPTIONAL_COLUMNS
     if missing_required:
-        raise ValueError(f"{file_name}: missing mandatory columns: {missing_required}")
+        raise ValueError(
+            f"{file_name}: missing mandatory columns: {missing_required}")
 
     missing_optional = (bronze_cols - pdf_cols) & OPTIONAL_COLUMNS
     if missing_optional:
-        logger.warning("%s: optional columns absent, filling with NULL: %s", file_name, missing_optional)
-        pdf = pdf.with_columns([pl.lit(None).alias(col) for col in missing_optional])
+        logger.warning(
+            "%s: optional columns absent, filling with NULL: %s", file_name, missing_optional)
+        pdf = pdf.with_columns([pl.lit(None).alias(col)
+                               for col in missing_optional])
 
     return pdf.select([field.name for field in BRONZE_SCHEMA])
 
@@ -160,7 +163,8 @@ def _ingest_raw_file(spark: SparkSession, raw_path: Path) -> tuple[DataFrame, in
     total_transactions_count = 0
     for f in csv_files:
         try:
-            header_idx, transactions_count, raw_header, detected_enc, file_hash, raw_content = _parse_metadata(f)
+            header_idx, transactions_count, raw_header, detected_enc, file_hash, raw_content = _parse_metadata(
+                f)
             if header_idx is None or transactions_count is None or raw_header is None:
                 raise ValueError("Failed metadata parsing")
 
@@ -174,14 +178,15 @@ def _ingest_raw_file(spark: SparkSession, raw_path: Path) -> tuple[DataFrame, in
                 has_header=True,
                 new_columns=new_headers,
             )
-            
+
             # Rename the columns according to the mapped ones
             pdf = pdf.rename(MAPPINGS, strict=False)
 
             # Polars renames same-named columns to "<name>_duplicated_<n>" when
             # `new_columns` would collide; "column_<n>" placeholders come from
             # _get_normalized_headers for empty header cells. Both are noise.
-            pdf = pdf.drop([c for c in pdf.columns if c.startswith("_duplicated_") or c.startswith("column_")])
+            pdf = pdf.drop([c for c in pdf.columns if c.startswith(
+                "_duplicated_") or c.startswith("column_")])
 
             pdf = pdf.with_columns([
                 pl.lit(datetime.now()).alias('_ingested_at'),
@@ -193,7 +198,8 @@ def _ingest_raw_file(spark: SparkSession, raw_path: Path) -> tuple[DataFrame, in
 
             total_transactions_count += transactions_count
 
-            dfs.append(spark.createDataFrame(pdf.to_arrow(), schema=BRONZE_SCHEMA))
+            dfs.append(spark.createDataFrame(
+                pdf.to_arrow(), schema=BRONZE_SCHEMA))
             logger.info("Loaded %s: %d rows", f.name, transactions_count)
 
         except (TypeError, AttributeError, KeyError, IndexError):
@@ -206,7 +212,8 @@ def _ingest_raw_file(spark: SparkSession, raw_path: Path) -> tuple[DataFrame, in
             errors.append((f.name, str(e)))
 
     if errors:
-        logger.warning("%d file(s) failed ingestion: %s", len(errors), [e[0] for e in errors])
+        logger.warning("%d file(s) failed ingestion: %s",
+                       len(errors), [e[0] for e in errors])
     if not dfs:
         raise ValueError(f"All files failed ingestion in {raw_path}")
 
